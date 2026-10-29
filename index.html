@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="theme-color" content="#040711">
+  <meta name="description" content="CAST — Complete Media Casting & Streaming Platform. Peer-to-peer casting for movies, bulk music, images, and documents. Created By Shiv Yogi.">
+  <title>CAST — Media Casting & Streaming Platform</title>
+
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/liquid-glass.css">
+  <link rel="stylesheet" href="css/desktop.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/players.css">
+  <link rel="stylesheet" href="css/waterdrop.css">
+</head>
+<body data-theme="midnight" data-accent="cyan" data-motion="standard" data-contrast="normal">
+
+  <!-- ========================================================================
+       Cinematic Intro Sequence (Strict Branding Rules)
+       Displays CAST -> Transitions to Created By Shiv Yogi -> Auto Completes
+       ======================================================================== -->
+  <div id="cinematic-intro" role="presentation" aria-label="Cinematic Intro">
+    <div class="intro-brand-container">
+      <div class="intro-logo-glow">
+        <svg class="cast-icon" viewBox="0 0 32 32" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 22 A 6 6 0 0 1 10 28" />
+          <path d="M4 16 A 12 12 0 0 1 16 28" />
+          <path d="M4 10 A 18 18 0 0 1 22 28" />
+          <rect x="3" y="4" width="26" height="20" rx="3" stroke-dasharray="20 100" />
+          <circle cx="4" cy="28" r="1.5" fill="#ffffff"/>
+        </svg>
+      </div>
+      <h1 class="intro-title-cast">CAST</h1>
+      <div class="intro-creator">
+        <span>Created By</span>
+        <span class="intro-creator-highlight">Shiv Yogi</span>
+      </div>
+      <div class="intro-progress-bar-container">
+        <div class="intro-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient Liquid Glass Background Orbs -->
+  <div class="liquid-bg-canvas" aria-hidden="true">
+    <div class="liquid-orb liquid-orb-1"></div>
+    <div class="liquid-orb liquid-orb-2"></div>
+    <div class="liquid-orb liquid-orb-3"></div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ========================================================================
+       Main Application Shell
+       ======================================================================== -->
+  <div id="app-root">
+
+    <!-- ----------------------------------------------------------------------
+         DESKTOP INTERFACE: Sidebar Navigation & Status Card
+         ---------------------------------------------------------------------- -->
+    <aside id="desktop-sidebar" class="desktop-only" aria-label="Desktop Navigation">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo-icon">
+          <svg class="cast-icon" viewBox="0 0 32 32" fill="none" stroke="#ffffff" stroke-width="2.2">
+            <path d="M4 22 A 6 6 0 0 1 10 28" />
+            <path d="M4 16 A 12 12 0 0 1 16 28" />
+            <path d="M4 10 A 18 18 0 0 1 22 28" />
+            <rect x="3" y="4" width="26" height="20" rx="3" stroke-dasharray="20 100" />
+            <circle cx="4" cy="28" r="1.5" fill="#ffffff"/>
+          </svg>
+        </div>
+        <div class="sidebar-brand-text">
+          <span class="brand-title">CAST</span>
+          <span class="brand-subtitle">Shiv Yogi Studio</span>
+        </div>
+      </div>
+
+      <!-- Navigation List -->
+      <nav class="sidebar-nav">
+        <a href="#home" class="nav-item active" data-section="home">
+          <span class="cast-icon-wrapper" data-icon="nav-home"></span>
+          <span>Home</span>
+        </a>
+        <a href="#cast" class="nav-item" data-section="cast">
+          <span class="cast-icon-wrapper" data-icon="nav-cast"></span>
+          <span>Cast</span>
+          <span class="nav-badge">Sender</span>
+        </a>
+        <a href="#pair" class="nav-item" data-section="pair">
+          <span class="cast-icon-wrapper" data-icon="nav-pair"></span>
+          <span>Pair / Watch</span>
+          <span class="nav-badge">Receiver</span>
+        </a>
+        <a href="#movies" class="nav-item" data-section="movies">
+          <span class="cast-icon-wrapper" data-icon="nav-movies"></span>
+          <span>Movies</span>
+        </a>
+        <a href="#music" class="nav-item" data-section="music">
+          <span class="cast-icon-wrapper" data-icon="nav-music"></span>
+          <span>Music</span>
+        </a>
+        <a href="#images" class="nav-item" data-section="images">
+          <span class="cast-icon-wrapper" data-icon="nav-images"></span>
+          <span>Images</span>
+        </a>
+        <a href="#documents" class="nav-item" data-section="documents">
+          <span class="cast-icon-wrapper" data-icon="nav-docs"></span>
+          <span>Documents</span>
+        </a>
+        <a href="#settings" class="nav-item" data-section="settings">
+          <span class="cast-icon-wrapper" data-icon="nav-settings"></span>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Status Card -->
+      <div class="sidebar-status-card">
+        <div class="device-status-header">
+          <span>Connection</span>
+          <div class="device-status-badge">
+            <span class="status-dot"></span>
+            <span class="connection-status-text">STANDBY</span>
+          </div>
+        </div>
+        <div class="device-meta-row">
+          <span>Battery</span>
+          <span id="local-battery-status" style="font-family:var(--font-mono); font-size:11px;">Checking...</span>
+        </div>
+        <div class="device-meta-row">
+          <span>Engine</span>
+          <span style="font-size:11px; color:var(--accent-cyan);">WebRTC Mesh</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ----------------------------------------------------------------------
+         MOBILE INTERFACE: Compact Header & Mobile Actions
+         ---------------------------------------------------------------------- -->
+    <header id="mobile-header" class="mobile-only" aria-label="Mobile Header">
+      <div class="mobile-brand">
+        <div class="mobile-logo-icon">
+          <svg class="cast-icon" viewBox="0 0 32 32" fill="none" stroke="#ffffff" stroke-width="2.2">
+            <path d="M4 22 A 6 6 0 0 1 10 28" />
+            <path d="M4 16 A 12 12 0 0 1 16 28" />
+            <path d="M4 10 A 18 18 0 0 1 22 28" />
+            <rect x="3" y="4" width="26" height="20" rx="3" stroke-dasharray="20 100" />
+            <circle cx="4" cy="28" r="1.5" fill="#ffffff"/>
+          </svg>
+        </div>
+        <span class="mobile-brand-title">CAST</span>
+      </div>
+
+      <div class="mobile-header-actions">
+        <div class="device-status-badge" style="padding:4px 8px; background:rgba(255,255,255,0.06); border-radius:var(--radius-full);">
+          <span class="status-dot"></span>
+          <span class="connection-status-text" style="font-size:10px;">STANDBY</span>
+        </div>
+        <button class="btn-icon" id="btn-mobile-settings" title="Settings" aria-label="Settings" style="width:36px; height:36px;">
+          <span class="cast-icon-wrapper" data-icon="nav-settings"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ----------------------------------------------------------------------
+         MAIN WORKSPACE: Sections Viewport
+         ---------------------------------------------------------------------- -->
+    <main id="desktop-workspace">
+      <!-- Desktop Header -->
+      <div class="desktop-header desktop-only">
+        <div class="desktop-header-title">
+          <h2 class="header-page-title" id="desktop-header-title">Media Casting Hub</h2>
+          <span class="header-page-desc" id="desktop-header-desc">Real-time peer-to-peer media casting and streaming studio</span>
+        </div>
+
+        <div class="desktop-header-actions">
+          <button class="btn-secondary" id="btn-quick-pair" onclick="window.castApp?.navigateTo('pair')">
+            <span class="cast-icon-wrapper" data-icon="nav-pair"></span>
+            <span>Pair Device</span>
+          </button>
+          <button class="btn-primary" id="btn-quick-cast" onclick="window.castApp?.navigateTo('cast')">
+            <span class="cast-icon-wrapper" data-icon="nav-cast"></span>
+            <span>Cast Media</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Workspace Container -->
+      <div class="desktop-content" id="mobile-workspace">
+
+        <!-- ==================================================================
+             SECTION 1: HOME (Dashboard, Overview, Quick Starters)
+             ================================================================== -->
+        <section class="app-section active" id="section-home">
+          <!-- Hero Banner -->
+          <div class="glass-panel" style="padding:36px; margin-bottom:28px; background:linear-gradient(135deg, rgba(16,26,56,0.85) 0%, rgba(10,16,36,0.65) 100%);">
+            <div class="badge badge-active" style="margin-bottom:12px;">P2P MEDIA STREAMING PLATFORM</div>
+            <h1 style="font-size:32px; font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">
+              Direct Screen & Media Casting Studio
+            </h1>
+            <p style="color:var(--text-secondary); max-width:680px; margin-bottom:24px; font-size:14.5px;">
+              Pair two mobile phones or cast to a Smart TV browser with secure QR codes and 6-digit PINs. Stream movies, bulk music, image galleries, and documents with instant WebRTC synchronization.
+            </p>
+            <div style="display:flex; flex-wrap:wrap; gap:12px;">
+              <button class="btn-primary" onclick="window.castApp?.navigateTo('cast')">
+                <span class="cast-icon-wrapper" data-icon="nav-cast"></span>
+                <span>Act as Sender</span>
+              </button>
+              <button class="btn-secondary" onclick="window.castApp?.navigateTo('pair')">
+                <span class="cast-icon-wrapper" data-icon="nav-pair"></span>
+                <span>Act as Receiver</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Test Sample Demonstrations -->
+          <div class="glass-panel" style="padding:24px; margin-bottom:28px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <div>
+                <h3 style="font-size:16px; font-weight:700;">Instant Media Demonstration Packs</h3>
+                <p style="font-size:12px; color:var(--text-muted);">Try media players, visualizers, and Waterdrop controls immediately</p>
+              </div>
+            </div>
+
+            <div class="mobile-card-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
+              <div class="glass-panel glass-panel-interactive" id="btn-load-demo-video" style="padding:18px;">
+                <div style="color:var(--accent-cyan); margin-bottom:12px;">
+                  <span class="cast-icon-wrapper" data-icon="nav-movies"></span>
+                </div>
+                <div style="font-weight:600; font-size:14px; margin-bottom:4px;">Cinema Video Demo</div>
+                <div style="font-size:12px; color:var(--text-muted);">Custom player with speed, fit modes & sync</div>
+              </div>
+
+              <div class="glass-panel glass-panel-interactive" id="btn-load-demo-audio" style="padding:18px;">
+                <div style="color:var(--accent-purple); margin-bottom:12px;">
+                  <span class="cast-icon-wrapper" data-icon="nav-music"></span>
+                </div>
+                <div style="font-weight:600; font-size:14px; margin-bottom:4px;">Bulk Music Demo</div>
+                <div style="font-size:12px; color:var(--text-muted);">Queued audio with Aurora Nebula visualizer</div>
+              </div>
+
+              <div class="glass-panel glass-panel-interactive" id="btn-load-demo-image" style="padding:18px;">
+                <div style="color:var(--text-success); margin-bottom:12px;">
+                  <span class="cast-icon-wrapper" data-icon="nav-images"></span>
+                </div>
+                <div style="font-weight:600; font-size:14px; margin-bottom:4px;">Image Gallery Demo</div>
+                <div style="font-size:12px; color:var(--text-muted);">Multi-touch zoom with SVG Waterdrop</div>
+              </div>
+
+              <div class="glass-panel glass-panel-interactive" id="btn-load-demo-doc" style="padding:18px;">
+                <div style="color:var(--accent-blue); margin-bottom:12px;">
+                  <span class="cast-icon-wrapper" data-icon="nav-docs"></span>
+                </div>
+                <div style="font-weight:600; font-size:14px; margin-bottom:4px;">Document Spec Demo</div>
+                <div style="font-size:12px; color:var(--text-muted);">PDF/Text search with Waterdrop controls</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 2: CAST (Sender Studio)
+             ================================================================== -->
+        <section class="app-section" id="section-cast" style="display:none;">
+          <div class="studio-grid-wide" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+            <!-- Sender Actions Panel -->
+            <div class="glass-panel" style="padding:28px;">
+              <div class="badge badge-active" style="margin-bottom:12px;">SENDER BROADCAST STUDIO</div>
+              <h2 style="font-size:22px; font-weight:700; margin-bottom:8px;">Choose Media to Cast</h2>
+              <p style="color:var(--text-secondary); font-size:13.5px; margin-bottom:24px;">
+                Select files from your device. Stream directly to paired smart TVs, phones, or computers over secure WebRTC.
+              </p>
+
+              <!-- Upload Cards -->
+              <div style="display:flex; flex-direction:column; gap:14px;">
+                <!-- Movie Upload Card -->
+                <label class="mobile-touch-row glass-panel-interactive" style="cursor:pointer;">
+                  <input type="file" id="upload-movie-input" accept="video/*" style="display:none;" />
+                  <div style="color:var(--accent-cyan);"><span class="cast-icon-wrapper" data-icon="nav-movies"></span></div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600; font-size:14px;">Upload & Cast Movie</div>
+                    <div style="font-size:11px; color:var(--text-muted);">MP4, WebM, MKV, MOV formats supported</div>
+                  </div>
+                  <button type="button" class="btn-secondary" style="padding:6px 14px; font-size:12px;">Browse</button>
+                </label>
+
+                <!-- Bulk Music Upload Card -->
+                <label class="mobile-touch-row glass-panel-interactive" style="cursor:pointer;">
+                  <input type="file" id="upload-music-input" accept="audio/*" multiple style="display:none;" />
+                  <div style="color:var(--accent-purple);"><span class="cast-icon-wrapper" data-icon="nav-music"></span></div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600; font-size:14px;">Bulk Music Upload</div>
+                    <div style="font-size:11px; color:var(--text-muted);">Select multiple songs (MP3, WAV, OGG, AAC)</div>
+                  </div>
+                  <button type="button" class="btn-secondary" style="padding:6px 14px; font-size:12px;">Bulk Select</button>
+                </label>
+
+                <!-- Images Upload Card -->
+                <label class="mobile-touch-row glass-panel-interactive" style="cursor:pointer;">
+                  <input type="file" id="upload-image-input" accept="image/*" multiple style="display:none;" />
+                  <div style="color:var(--text-success);"><span class="cast-icon-wrapper" data-icon="nav-images"></span></div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600; font-size:14px;">Share Images & Photos</div>
+                    <div style="font-size:11px; color:var(--text-muted);">JPG, PNG, WebP, GIF, SVG gallery</div>
+                  </div>
+                  <button type="button" class="btn-secondary" style="padding:6px 14px; font-size:12px;">Browse</button>
+                </label>
+
+                <!-- Documents Upload Card -->
+                <label class="mobile-touch-row glass-panel-interactive" style="cursor:pointer;">
+                  <input type="file" id="upload-doc-input" accept=".pdf,.txt,.md,.json,.log,.csv" style="display:none;" />
+                  <div style="color:var(--accent-blue);"><span class="cast-icon-wrapper" data-icon="nav-docs"></span></div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600; font-size:14px;">Cast PDF or Document</div>
+                    <div style="font-size:11px; color:var(--text-muted);">PDF, TXT, Markdown, JSON, Text specs</div>
+                  </div>
+                  <button type="button" class="btn-secondary" style="padding:6px 14px; font-size:12px;">Browse</button>
+                </label>
+              </div>
+            </div>
+
+            <!-- Sender Pairing Status & QR Card -->
+            <div class="glass-panel" style="padding:28px;">
+              <div class="badge" style="margin-bottom:12px;">PAIRING STATUS</div>
+              <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Active Receiver Link</h3>
+
+              <div id="sender-idle-box">
+                <p style="color:var(--text-muted); font-size:13px; margin-bottom:18px;">
+                  Generate a pairing code and QR session to connect your receiver device.
+                </p>
+                <button class="btn-primary" id="btn-create-sender-session" style="width:100%;">
+                  <span class="cast-icon-wrapper" data-icon="qr-code"></span>
+                  <span>Start New Pairing Session</span>
+                </button>
+              </div>
+
+              <div id="sender-active-box" style="display:none;">
+                <div style="text-align:center; padding:12px 0;">
+                  <div id="sender-qr-container" style="display:inline-block; margin-bottom:16px;"></div>
+                  <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">6-DIGIT PAIRING CODE</div>
+                  <div id="sender-code-display" style="font-family:var(--font-mono); font-size:36px; font-weight:800; letter-spacing:0.18em; color:var(--accent-cyan); margin-bottom:12px;">
+                    000 000
+                  </div>
+                  <div class="badge badge-active" id="sender-timer-display" style="margin-bottom:16px;">
+                    Expires in 5:00
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-bottom:16px;">
+                  <input type="text" class="glass-input" id="sender-pair-url" readonly style="font-size:12px; font-family:var(--font-mono);" />
+                  <button class="btn-secondary" id="btn-copy-pair-url" title="Copy Pairing URL" aria-label="Copy Pairing URL">
+                    <span class="cast-icon-wrapper" data-icon="copy"></span>
+                  </button>
+                </div>
+
+                <button class="btn-danger" id="btn-disconnect-session" style="width:100%;">
+                  <span class="cast-icon-wrapper" data-icon="disconnect"></span>
+                  <span>Disconnect Session</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 3: PAIR / WATCH (Receiver Studio & DVD No-Signal)
+             ================================================================== -->
+        <section class="app-section" id="section-pair" style="display:none;">
+          <div class="studio-grid-wide" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px;">
+            <!-- Receiver Join Panel -->
+            <div class="glass-panel" style="padding:28px;">
+              <div class="badge badge-active" style="margin-bottom:12px;">RECEIVER DISPLAY STUDIO</div>
+              <h2 style="font-size:22px; font-weight:700; margin-bottom:8px;">Pair with Sender</h2>
+              <p style="color:var(--text-secondary); font-size:13.5px; margin-bottom:24px;">
+                Enter the 6-digit code shown on your sender phone or scan its QR code to receive streams.
+              </p>
+
+              <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:24px;">
+                <div>
+                  <label for="input-receiver-code" style="display:block; font-size:12px; font-weight:600; color:var(--text-muted); margin-bottom:8px;">
+                    ENTER 6-DIGIT CODE
+                  </label>
+                  <input type="text" class="glass-input" id="input-receiver-code" placeholder="e.g. 482915" maxlength="6" style="font-family:var(--font-mono); font-size:24px; letter-spacing:0.18em; text-align:center;" />
+                </div>
+
+                <button class="btn-primary" id="btn-join-receiver" style="width:100%;">
+                  <span class="cast-icon-wrapper" data-icon="check"></span>
+                  <span>Connect as Receiver</span>
+                </button>
+              </div>
+
+              <!-- Connected Device Details -->
+              <div class="glass-panel glass-panel-subtle" style="padding:16px;">
+                <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">
+                  Connected Peer Information
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span style="color:var(--text-secondary);">Device:</span>
+                  <span id="connected-peer-name" style="font-weight:600;">None</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span style="color:var(--text-secondary);">Screen:</span>
+                  <span id="connected-peer-screen" style="font-family:var(--font-mono); font-size:12px;">N/A</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:13px;">
+                  <span style="color:var(--text-secondary);">Battery:</span>
+                  <span id="connected-peer-battery" style="font-size:12px;">Battery Status Unavailable</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- DVD-Style NO SIGNAL Screen Mount -->
+            <div class="glass-panel" style="padding:20px; display:flex; flex-direction:column;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div class="badge">RECEIVER SCREEN PREVIEW</div>
+                <span style="font-size:11px; color:var(--text-muted);">DVD No-Signal Idle State</span>
+              </div>
+              
+              <div id="no-signal-mount" style="flex:1; min-height:360px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 4: MOVIES (Custom Video Player)
+             ================================================================== -->
+        <section class="app-section" id="section-movies" style="display:none;">
+          <div class="glass-panel" style="padding:20px; margin-bottom:20px;">
+            <div id="movie-player-mount"></div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 5: MUSIC (Bulk Upload Studio & Aurora Visualizer)
+             ================================================================== -->
+        <section class="app-section" id="section-music" style="display:none;">
+          <div id="music-player-mount"></div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 6: IMAGES (Image Viewer with SVG Waterdrop)
+             ================================================================== -->
+        <section class="app-section" id="section-images" style="display:none;">
+          <div class="glass-panel" style="padding:16px;">
+            <div id="image-viewer-mount" style="height:calc(100vh - 220px); min-height:500px;"></div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 7: DOCUMENTS (PDF & Text Document Reader)
+             ================================================================== -->
+        <section class="app-section" id="section-documents" style="display:none;">
+          <div class="glass-panel" style="padding:16px;">
+            <div id="pdf-reader-mount" style="height:calc(100vh - 220px); min-height:540px;"></div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SECTION 8: SETTINGS (12 Comprehensive Functional Categories)
+             ================================================================== -->
+        <section class="app-section" id="section-settings" style="display:none;">
+          <div class="glass-panel" style="padding:28px;">
+            <div class="settings-desktop-grid">
+              
+              <!-- Settings Category Nav -->
+              <div style="display:flex; flex-direction:column; gap:6px; border-right:1px solid var(--border-glass-dim); padding-right:16px;">
+                <button class="nav-item settings-cat-btn active" data-cat="appearance">Appearance</button>
+                <button class="nav-item settings-cat-btn" data-cat="layout">Device & Layout</button>
+                <button class="nav-item settings-cat-btn" data-cat="performance">Performance</button>
+                <button class="nav-item settings-cat-btn" data-cat="movie">Movie Player</button>
+                <button class="nav-item settings-cat-btn" data-cat="music">Music Player</button>
+                <button class="nav-item settings-cat-btn" data-cat="waterdrop">Waterdrop Controls</button>
+                <button class="nav-item settings-cat-btn" data-cat="pdf">PDF Reader</button>
+                <button class="nav-item settings-cat-btn" data-cat="pairing">Pairing & Signals</button>
+                <button class="nav-item settings-cat-btn" data-cat="accessibility">Accessibility</button>
+                <button class="nav-item settings-cat-btn" data-cat="storage">Storage & Data</button>
+              </div>
+
+              <!-- Settings Forms -->
+              <div style="overflow-y:auto; max-height:650px; padding-left:8px;">
+                
+                <!-- 1. Appearance -->
+                <div class="settings-cat-content" data-cat="appearance">
+                  <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Appearance Preferences</h3>
+                  
+                  <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div>
+                      <label for="setting-theme" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Theme Mode</label>
+                      <select class="glass-input glass-select" id="setting-theme">
+                        <option value="midnight">Midnight Glass (Default)</option>
+                        <option value="obsidian">Obsidian Abyss</option>
+                        <option value="cyber">Cyber Neon</option>
+                        <option value="amethyst">Deep Amethyst</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="setting-accent" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Accent Palette</label>
+                      <select class="glass-input glass-select" id="setting-accent">
+                        <option value="cyan">Neon Cyan</option>
+                        <option value="blue">Electric Blue</option>
+                        <option value="purple">Vibrant Purple</option>
+                        <option value="emerald">Emerald Aurora</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="setting-glass-intensity" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Glass Intensity</label>
+                      <select class="glass-input glass-select" id="setting-glass-intensity">
+                        <option value="low">Subtle Glass (45%)</option>
+                        <option value="medium">Standard Frost (65%)</option>
+                        <option value="high">Heavy Obsidian (88%)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="setting-blur-intensity" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Backdrop Blur (px)</label>
+                      <input type="range" class="glass-input" id="setting-blur-intensity" min="4" max="36" value="18" style="padding:0;" />
+                    </div>
+
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                      <label for="setting-bg-effects" style="font-size:13px; color:var(--text-main);">Floating Ambient Background Orbs</label>
+                      <input type="checkbox" id="setting-bg-effects" checked style="width:18px; height:18px; accent-color:var(--accent-cyan);" />
+                    </div>
+
+                    <div>
+                      <label for="setting-corner-radius" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Corner Radius</label>
+                      <select class="glass-input glass-select" id="setting-corner-radius">
+                        <option value="rounded">Smooth Rounded (14px)</option>
+                        <option value="extra-rounded">Extra Rounded (20px)</option>
+                        <option value="sharp">Sharp Modern (4px)</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="setting-font-size" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Interface Font Size</label>
+                      <select class="glass-input glass-select" id="setting-font-size">
+                        <option value="small">Compact (13.5px)</option>
+                        <option value="medium">Standard (15px)</option>
+                        <option value="large">Spacious (17px)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. Device & Layout -->
+                <div class="settings-cat-content" data-cat="layout" style="display:none;">
+                  <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Device & Layout Preferences</h3>
+                  <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div>
+                      <label for="setting-layout-mode" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Layout Adaptation</label>
+                      <select class="glass-input glass-select" id="setting-layout-mode">
+                        <option value="auto">Automatic (Responsive)</option>
+                        <option value="desktop">Desktop Studio (Forced)</option>
+                        <option value="mobile">Mobile Touch (Forced)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. Performance -->
+                <div class="settings-cat-content" data-cat="performance" style="display:none;">
+                  <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Performance Optimization</h3>
+                  <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div>
+                      <label for="setting-perf-mode" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:6px;">Performance Mode</label>
+                      <select class="glass-input glass-select" id="setting-perf-mode">
+                        <option value="balanced">Balanced (Recommended)</option>
+                        <option value="performance">High Performance (Low-End Devices)</option>
+                        <option value="quality">Maximum Quality (60fps Visualizer)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 6. Waterdrop Controls -->
+                <div class="settings-cat-content" data-cat="waterdrop" style="display:none;">
+                  <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Animated SVG Waterdrop Controls</h3>
+                  <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div>
+                      <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <label for="setting-waterdrop-timer" style="font-size:13px; color:var(--text-muted);">Auto-Collapse Idle Timeout</label>
+                        <span id="setting-waterdrop-timer-label" style="font-size:12px; font-family:var(--font-mono); color:var(--accent-cyan);">4 seconds</span>
+                      </div>
+                      <input type="range" class="glass-input" id="setting-waterdrop-timer" min="3" max="6" value="4" step="1" style="padding:0;" />
+                      <p style="font-size:11px; color:var(--text-muted); margin-top:6px;">
+                        The Waterdrop morphs smoothly back into a floating bubble after this period. Active panning or dragging pauses the timer.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 9. Accessibility -->
+                <div class="settings-cat-content" data-cat="accessibility" style="display:none;">
+                  <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Accessibility & Ergonomics</h3>
+                  <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                      <label for="setting-high-contrast" style="font-size:13px; color:var(--text-main);">High Contrast Borders</label>
+                      <input type="checkbox" id="setting-high-contrast" style="width:18px; height:18px; accent-color:var(--accent-cyan);" />
+                    </div>
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                      <label for="setting-reduced-motion" style="font-size:13px; color:var(--text-main);">Reduced Motion (Pause Animations)</label>
+                      <input type="checkbox" id="setting-reduced-motion" style="width:18px; height:18px; accent-color:var(--accent-cyan);" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 10. Storage & Data -->
+                <div class="settings-cat-content" data-cat="storage" style="display:none;">
+                  <h3 style="font-size:18px; font-weight:700; margin-bottom:16px;">Storage & Data Backup</h3>
+                  
+                  <div class="glass-panel glass-panel-subtle" style="padding:16px; margin-bottom:18px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;">
+                      <span>LocalStorage Usage:</span>
+                      <span id="stats-local-storage" style="font-family:var(--font-mono); font-weight:600;">0 KB</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:13px;">
+                      <span>IndexedDB & Cache:</span>
+                      <span id="stats-indexed-db" style="font-family:var(--font-mono); font-weight:600;">Calculating...</span>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <button class="btn-secondary" id="btn-export-settings">
+                      <span class="cast-icon-wrapper" data-icon="download"></span>
+                      <span>Export Settings JSON</span>
+                    </button>
+
+                    <label class="btn-secondary" style="cursor:pointer;">
+                      <span class="cast-icon-wrapper" data-icon="upload"></span>
+                      <span>Import Settings JSON</span>
+                      <input type="file" id="file-import-settings" accept=".json" style="display:none;" />
+                    </label>
+
+                    <button class="btn-secondary" id="btn-clear-cache">
+                      <span class="cast-icon-wrapper" data-icon="trash"></span>
+                      <span>Clear Media Cache</span>
+                    </button>
+
+                    <button class="btn-danger" id="btn-reset-settings">
+                      <span class="cast-icon-wrapper" data-icon="refresh"></span>
+                      <span>Reset All Defaults</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ----------------------------------------------------------------------
+         MOBILE INTERFACE: Fixed Bottom Navigation Bar
+         ---------------------------------------------------------------------- -->
+    <nav id="mobile-bottom-nav" class="mobile-only" aria-label="Mobile Navigation">
+      <div class="bottom-nav-item active" data-section="home">
+        <span class="cast-icon-wrapper" data-icon="nav-home"></span>
+        <span>Home</span>
+      </div>
+      <div class="bottom-nav-item" data-section="cast">
+        <span class="cast-icon-wrapper" data-icon="nav-cast"></span>
+        <span>Cast</span>
+      </div>
+      <div class="bottom-nav-item" data-section="pair">
+        <span class="cast-icon-wrapper" data-icon="nav-pair"></span>
+        <span>Pair</span>
+      </div>
+      <div class="bottom-nav-item" data-section="movies">
+        <span class="cast-icon-wrapper" data-icon="nav-movies"></span>
+        <span>Movies</span>
+      </div>
+      <div class="bottom-nav-item" data-section="music">
+        <span class="cast-icon-wrapper" data-icon="nav-music"></span>
+        <span>Music</span>
+      </div>
+      <div class="bottom-nav-item" data-section="images">
+        <span class="cast-icon-wrapper" data-icon="nav-images"></span>
+        <span>Images</span>
+      </div>
+      <div class="bottom-nav-item" data-section="documents">
+        <span class="cast-icon-wrapper" data-icon="nav-docs"></span>
+        <span>Docs</span>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- Main Application Script (ES Module) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

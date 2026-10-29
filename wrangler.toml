@@ -1,0 +1,12 @@
+name = "cast-signaling-worker"
+main = "workers/signaling-worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ENVIRONMENT = "production"
+MAX_PAIRING_ATTEMPTS = "5"
+
+# Optional: Durable Objects or KV can be bound for distributed cross-region state
+# [[kv_namespaces]]
+# binding = "CAST_SESSIONS"
+# id = "<YOUR_KV_NAMESPACE_ID>"

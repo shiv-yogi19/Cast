@@ -1,0 +1,19 @@
+{
+  "name": "CAST — Media Casting & Streaming Platform",
+  "short_name": "CAST",
+  "description": "High-performance peer-to-peer media casting and streaming platform. Created By Shiv Yogi.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#040711",
+  "theme_color": "#00e5ff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "assets/svg/icons.svg#icon-cast-symbol",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["multimedia", "utilities", "entertainment"]
+}

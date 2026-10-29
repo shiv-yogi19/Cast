@@ -1,0 +1,15 @@
+{
+  "name": "cast-media-platform",
+  "version": "1.0.0",
+  "description": "CAST — Complete Media Casting & Streaming Platform. Created By Shiv Yogi.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "serve": "node -e 'const http=require(\"http\"), fs=require(\"fs\"), path=require(\"path\"); http.createServer((req,res)=>{ let p=path.join(process.cwd(), req.url===\"/\"?\"index.html\":req.url.split(\"?\")[0]); fs.readFile(p,(e,d)=>{ if(e){res.statusCode=404;res.end(\"Not found\");}else{ const ext=path.extname(p); const m={\".html\":\"text/html\",\".css\":\"text/css\",\".js\":\"text/javascript\",\".svg\":\"image/svg+xml\",\".json\":\"application/json\"}; res.setHeader(\"Content-Type\", m[ext]||\"text/plain\"); res.end(d); } }); }).listen(8080, ()=>console.log(\"CAST running at http://localhost:8080\"));'",
+    "test": "node test/suite.js",
+    "package": "zip -r cast-platform.zip . -x 'node_modules/*' -x '.git/*'"
+  },
+  "keywords": ["webrtc", "casting", "streaming", "media-player", "liquid-glass"],
+  "author": "Shiv Yogi",
+  "license": "MIT"
+}
