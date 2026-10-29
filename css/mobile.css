@@ -1,0 +1,202 @@
+/* ==========================================================================
+   CAST — Mobile & Tablet Interface Styles
+   Compact header, bottom navigation bar, touch-first cards, gestures, responsive grids
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  /* Hide Desktop-Only Elements on Mobile/Tablet */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* App Root Layout for Mobile */
+  #app-root {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Compact Mobile Header */
+  #mobile-header {
+    height: var(--mobile-header-height);
+    background: rgba(8, 13, 30, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 30;
+    flex-shrink: 0;
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobile-logo-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 229, 255, 0.35);
+  }
+
+  .mobile-logo-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #ffffff;
+  }
+
+  .mobile-brand-title {
+    font-family: var(--font-brand);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    background: var(--text-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Mobile Main Scrollable View */
+  #mobile-workspace {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px;
+    padding-bottom: calc(var(--bottom-nav-height) + 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Mobile Bottom Navigation Bar */
+  #mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-height);
+    background: rgba(7, 11, 26, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid var(--border-glass-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    z-index: 50;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex: 1;
+    height: 100%;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .bottom-nav-item svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    transition: transform var(--transition-fast);
+  }
+
+  .bottom-nav-item.active {
+    color: var(--accent-cyan);
+  }
+
+  .bottom-nav-item.active svg {
+    stroke: var(--accent-cyan);
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
+  }
+
+  /* Mobile Media Cards & Lists */
+  .mobile-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .mobile-touch-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: rgba(15, 23, 46, 0.55);
+    border: 1px solid var(--border-glass-dim);
+    min-height: 52px;
+  }
+
+  /* Fullscreen mobile viewers overlay */
+  .mobile-fullscreen-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Tablet Intermediate Layout (600px - 991px) */
+@media (min-width: 600px) and (max-width: 991px) {
+  #mobile-workspace {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    align-content: start;
+  }
+
+  .tablet-full-width {
+    grid-column: 1 / -1;
+  }
+
+  .mobile-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* Landscape Mode on Mobile */
+@media (max-width: 991px) and (orientation: landscape) {
+  #mobile-bottom-nav {
+    height: 48px;
+  }
+  #mobile-workspace {
+    padding-bottom: 60px;
+  }
+}

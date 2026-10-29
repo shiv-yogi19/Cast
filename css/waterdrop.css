@@ -1,0 +1,217 @@
+/* ==========================================================================
+   CAST — Animated SVG Waterdrop Control System
+   Floating liquid-morph bubble expanding into glass control bar for Images & PDFs
+   ========================================================================== */
+
+/* Waterdrop Floating Container */
+.waterdrop-container {
+  position: absolute;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-morph);
+  user-select: none;
+  touch-action: none;
+}
+
+/* Placement variants */
+.waterdrop-pos-bottom-right {
+  bottom: 30px;
+  right: 30px;
+}
+
+.waterdrop-pos-bottom-center {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.waterdrop-pos-bottom-left {
+  bottom: 30px;
+  left: 30px;
+}
+
+/* Closed Bubble State */
+.waterdrop-bubble {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(0, 229, 255, 0.4) 0%, rgba(16, 26, 60, 0.85) 60%, rgba(6, 10, 24, 0.95) 100%);
+  border: 1px solid rgba(0, 229, 255, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 229, 255, 0.35), 0 0 2px 1px rgba(255, 255, 255, 0.3) inset;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  animation: waterdropFloat 4s infinite alternate ease-in-out;
+}
+
+.waterdrop-bubble:hover {
+  transform: scale(1.08);
+  border-color: #00e5ff;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 229, 255, 0.6);
+}
+
+.waterdrop-bubble svg {
+  width: 26px;
+  height: 26px;
+  color: #ffffff;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+/* Ripple effect around bubble */
+.waterdrop-bubble::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  animation: waterdropRipple 3s infinite ease-out;
+  pointer-events: none;
+}
+
+/* Expanded Liquid Control Bar */
+.waterdrop-panel {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(10, 16, 40, 0.88);
+  border: 1px solid var(--border-glass-bright);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: var(--radius-full);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 229, 255, 0.2);
+  transform-origin: center;
+  animation: liquidExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.waterdrop-container.expanded .waterdrop-bubble {
+  display: none;
+}
+
+.waterdrop-container.expanded .waterdrop-panel {
+  display: flex;
+}
+
+/* Waterdrop Buttons */
+.wd-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass-dim);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+}
+
+.wd-btn:hover {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: rgba(0, 229, 255, 0.4);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
+}
+
+.wd-btn:active {
+  transform: translateY(0);
+}
+
+.wd-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
+/* Counter & Info Badges inside Waterdrop */
+.wd-counter-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: var(--accent-cyan);
+  white-space: nowrap;
+}
+
+.wd-separator {
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 0 2px;
+}
+
+/* Close Waterdrop trigger */
+.wd-btn-close {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: var(--text-danger);
+}
+.wd-btn-close:hover {
+  background: rgba(248, 113, 113, 0.25);
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #ffffff;
+}
+
+/* Single-Item Rule for Waterdrop: hide navigation when 1 item */
+.wd-single-hidden {
+  display: none !important;
+}
+
+/* Animations */
+@keyframes waterdropFloat {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.03); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes waterdropRipple {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+@keyframes liquidExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile specific styling for Waterdrop */
+@media (max-width: 991px) {
+  .waterdrop-pos-bottom-right,
+  .waterdrop-pos-bottom-center,
+  .waterdrop-pos-bottom-left {
+    bottom: calc(var(--bottom-nav-height) + 16px);
+  }
+
+  .waterdrop-panel {
+    max-width: calc(100vw - 32px);
+    overflow-x: auto;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .wd-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+}
